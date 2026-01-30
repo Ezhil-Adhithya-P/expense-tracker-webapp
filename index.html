@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UniWallet - Student Expense Tracker</title>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Icons -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
+    
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="brand">
+                <div class="logo-icon">
+                    <span class="material-icons-round">account_balance_wallet</span>
+                </div>
+                <div class="brand-text">
+                    <h1>UniWallet</h1>
+                    <p>Student Account</p>
+                </div>
+            </div>
+
+            <nav class="nav-menu">
+                <a href="#" class="nav-item active" data-view="dashboard">
+                    <span class="material-icons-round">dashboard</span>
+                    <span>Dashboard</span>
+                </a>
+                <a href="#" class="nav-item" data-view="transactions">
+                    <span class="material-icons-round">receipt_long</span>
+                    <span>Transactions</span>
+                </a>
+                <a href="#" class="nav-item" data-view="budgets">
+                    <span class="material-icons-round">pie_chart</span>
+                    <span>Budgets</span>
+                </a>
+            </nav>
+
+            <div class="sidebar-footer">
+                <button class="btn btn-primary" id="add-expense-btn">
+                    <span class="material-icons-round">add</span>
+                    Add Expense
+                </button>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Header -->
+            <header class="top-bar">
+                <h2 id="page-title">Dashboard</h2>
+                <div class="user-profile">
+                    <span>Welcome Back, Student</span>
+                    <div class="avatar">
+                        <span class="material-icons-round">person</span>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Views Container -->
+            <div id="views-container">
+                
+                <!-- Dashboard View -->
+                <section id="dashboard-view" class="view active-view">
+                    <!-- Summary Cards -->
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-icon income">
+                                <span class="material-icons-round">account_balance</span>
+                            </div>
+                            <div class="stat-info">
+                                <span class="label">Monthly Budget</span>
+                                <h3 id="dash-budget-amount">$0.00</h3>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon expense">
+                                <span class="material-icons-round">credit_card</span>
+                            </div>
+                            <div class="stat-info">
+                                <span class="label">Total Spent</span>
+                                <h3 id="dash-spent-amount">$0.00</h3>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon balance">
+                                <span class="material-icons-round">savings</span>
+                            </div>
+                            <div class="stat-info">
+                                <span class="label">Remaining</span>
+                                <h3 id="dash-remaining-amount">$0.00</h3>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Charts & recent -->
+                    <div class="dashboard-grid">
+                        <div class="chart-container card">
+                            <div class="card-header">
+                                <h3>Spending Activity</h3>
+                            </div>
+                            <canvas id="spendingChart"></canvas>
+                        </div>
+                        <div class="recent-transactions card">
+                            <div class="card-header">
+                                <h3>Recent Transactions</h3>
+                                <button class="btn-text" onclick="app.navigateTo('transactions')">View All</button>
+                            </div>
+                            <ul class="transaction-list" id="dash-recent-list">
+                                <!-- Populated by JS -->
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Transactions View -->
+                <section id="transactions-view" class="view">
+                    <div class="filters-bar card">
+                        <div class="filter-group">
+                            <label>Location</label>
+                            <div class="toggle-switch">
+                                <input type="radio" id="filter-all" name="location" value="all" checked>
+                                <label for="filter-all">All</label>
+                                
+                                <input type="radio" id="filter-college" name="location" value="college">
+                                <label for="filter-college">College</label>
+                                
+                                <input type="radio" id="filter-outside" name="location" value="outside">
+                                <label for="filter-outside">Outside</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="transactions-table-container card">
+                        <table class="transactions-table">
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Purpose</th>
+                                    <th>Category</th>
+                                    <th>Mode</th>
+                                    <th>Amount</th>
+                                </tr>
+                            </thead>
+                            <tbody id="transactions-list-body">
+                                <!-- JS Populated -->
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+                
+                 <!-- Budgets View -->
+                <section id="budgets-view" class="view">
+                    <div class="budget-settings card">
+                        <h3>Budget Settings</h3>
+                        <p>Set your monthly spending limit.</p>
+                        <div class="input-group">
+                            <label>Monthly Limit ($)</label>
+                            <input type="number" id="budget-input" value="500">
+                        </div>
+                        <button class="btn btn-secondary" id="save-budget-btn">Update Budget</button>
+                    </div>
+                </section>
+
+            </div>
+        </main>
+    </div>
+
+    <!-- Add Expense Modal -->
+    <div class="modal-overlay" id="add-modal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3>Add New Expense</h3>
+                <button class="close-btn" id="close-modal">&times;</button>
+            </div>
+            <form id="add-expense-form">
+                <div class="form-group">
+                    <label>Amount ($)</label>
+                    <input type="number" id="amount" required min="0.01" step="0.01" placeholder="0.00">
+                </div>
+                <div class="form-group">
+                    <label>Purpose</label>
+                    <input type="text" id="purpose" required placeholder="e.g. Lunch, Books">
+                </div>
+                <div class="form-group">
+                    <label>Date</label>
+                    <input type="date" id="date" required>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Category</label>
+                        <select id="category" required>
+                            <option value="college">College</option>
+                            <option value="outside">Outside</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Payment Mode</label>
+                        <select id="payment-mode" required>
+                            <option value="cash">Cash</option>
+                            <option value="card">Card</option>
+                            <option value="upi">UPI</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-text" id="cancel-modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Add Expense</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script type="module" src="js/app.js"></script>
+</body>
+</html>
